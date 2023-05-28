@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather/viewModel/internet_bloc/internet_bloc.dart';
-import 'package:flutter_weather/viewModel/internet_bloc/internet_state.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 
@@ -13,35 +10,21 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InternetBloc, InternetState>(
-      builder: (context, internetState) {
-        //if internet connect state is InternetGainedState then get user current locality
-        if (internetState is InternetGainedState) {
-          return FutureBuilder<Placemark>(
-              future: _getAddress(
-                  lat, lon), // a previously-obtained Future<String> or null
-              builder:
-                  (BuildContext context, AsyncSnapshot<Placemark> snapshot) {
-                if (snapshot.hasData) {
-                  debugPrint(snapshot.data.toString());
-                  final String locality = snapshot.data!.locality!;
-                  return _header(
-                    locality: locality,
-                  );
-                }
-                //if snapshot have no data then set from local database
-                return _header(
-                  locality: "Pabna City",
-                );
-              });
-        } else {
-          //otherwise get user locality from local database
-          return _header(
-            locality: "Pabna",
-          );
-        }
-      },
-    );
+    return FutureBuilder<Placemark>(
+        future: _getAddress(
+            lat, lon), // a previously-obtained Future<String> or null
+        builder:
+            (BuildContext context, AsyncSnapshot<Placemark> snapshot) {
+          if (snapshot.hasData) {
+            debugPrint(snapshot.data.toString());
+            final String locality = snapshot.data!.locality!;
+            return _header(
+              locality: locality,
+            );
+          }
+          //if snapshot have no data then set from local database
+          return const Center(child: CircularProgressIndicator(),);
+        });
   }
 
   //get user current address
