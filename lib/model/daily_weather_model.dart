@@ -1,16 +1,32 @@
 import 'dart:convert';
 
-DailyWeather dailyWeatherModelFromJson(String str) => DailyWeather.fromJson(json.decode(str));
+import 'package:hive/hive.dart';
+part 'daily_weather_model.g.dart';
+
+DailyWeather dailyWeatherModelFromJson(String str) =>
+    DailyWeather.fromJson(json.decode(str));
 String dailyWeatherModelToJson(DailyWeather data) => json.encode(data.toJson());
-class DailyWeather {
+
+@HiveType(typeId: 5)
+class DailyWeather extends HiveObject{
+  String? _cityName;
+  String? _countryCode;
+  @HiveField(0)
+  List<Data>? _data;
+  dynamic _lat;
+  dynamic _lon;
+  String? _stateCode;
+  String? _timezone;
+
   DailyWeather({
-      String? cityName, 
-      String? countryCode, 
-      List<Data>? data, 
-      num? lat, 
-      num? lon, 
-      String? stateCode, 
-      String? timezone,}){
+    String? cityName,
+    String? countryCode,
+    List<Data>? data,
+    dynamic lat,
+    dynamic lon,
+    String? stateCode,
+    String? timezone,
+  }) {
     _cityName = cityName;
     _countryCode = countryCode;
     _data = data;
@@ -18,7 +34,7 @@ class DailyWeather {
     _lon = lon;
     _stateCode = stateCode;
     _timezone = timezone;
-}
+  }
 
   DailyWeather.fromJson(dynamic json) {
     _cityName = json['city_name'];
@@ -34,33 +50,30 @@ class DailyWeather {
     _stateCode = json['state_code'];
     _timezone = json['timezone'];
   }
-  String? _cityName;
-  String? _countryCode;
-  List<Data>? _data;
-  num? _lat;
-  num? _lon;
-  String? _stateCode;
-  String? _timezone;
-DailyWeather copyWith({  String? cityName,
-  String? countryCode,
-  List<Data>? data,
-  num? lat,
-  num? lon,
-  String? stateCode,
-  String? timezone,
-}) => DailyWeather(  cityName: cityName ?? _cityName,
-  countryCode: countryCode ?? _countryCode,
-  data: data ?? _data,
-  lat: lat ?? _lat,
-  lon: lon ?? _lon,
-  stateCode: stateCode ?? _stateCode,
-  timezone: timezone ?? _timezone,
-);
+
+  DailyWeather copyWith({
+    String? cityName,
+    String? countryCode,
+    List<Data>? data,
+    dynamic lat,
+    dynamic lon,
+    String? stateCode,
+    String? timezone,
+  }) =>
+      DailyWeather(
+        cityName: cityName ?? _cityName,
+        countryCode: countryCode ?? _countryCode,
+        data: data ?? _data,
+        lat: lat ?? _lat,
+        lon: lon ?? _lon,
+        stateCode: stateCode ?? _stateCode,
+        timezone: timezone ?? _timezone,
+      );
   String? get cityName => _cityName;
   String? get countryCode => _countryCode;
   List<Data>? get data => _data;
-  num? get lat => _lat;
-  num? get lon => _lon;
+  dynamic get lat => _lat;
+  dynamic get lon => _lon;
   String? get stateCode => _stateCode;
   String? get timezone => _timezone;
 
@@ -77,52 +90,95 @@ DailyWeather copyWith({  String? cityName,
     map['timezone'] = _timezone;
     return map;
   }
-
 }
-
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
+
+@HiveType(typeId: 6)
 class Data {
+  @HiveField(0)
+  num? _appMaxTemp;
+  @HiveField(1)
+  num? _appMinTemp;
+  num? _clouds;
+  num? _cloudsHi;
+  num? _cloudsLow;
+  num? _cloudsMid;
+  @HiveField(2)
+  String? _datetime;
+  num? _dewpt;
+  num? _highTemp;
+  num? _lowTemp;
+  dynamic _maxDhi;
+  num? _maxTemp;
+  num? _minTemp;
+  num? _moonPhase;
+  num? _moonPhaseLunation;
+  num? _moonriseTs;
+  num? _moonsetTs;
+  num? _ozone;
+  num? _pop;
+  num? _precip;
+  num? _pres;
+  num? _rh;
+  num? _slp;
+  num? _snow;
+  num? _snowDepth;
+  num? _sunriseTs;
+  num? _sunsetTs;
+  num? _temp;
+  num? _ts;
+  num? _uv;
+  String? _validDate;
+  num? _vis;
+  @HiveField(3)
+  Weather? _weather;
+  String? _windCdir;
+  String? _windCdirFull;
+  num? _windDir;
+  num? _windGustSpd;
+  num? _windSpd;
   Data({
-      num? appMaxTemp, 
-      num? appMinTemp, 
-      num? clouds, 
-      num? cloudsHi, 
-      num? cloudsLow, 
-      num? cloudsMid, 
-      String? datetime, 
-      num? dewpt, 
-      num? highTemp, 
-      num? lowTemp, 
-      dynamic maxDhi, 
-      num? maxTemp, 
-      num? minTemp, 
-      num? moonPhase, 
-      num? moonPhaseLunation, 
-      num? moonriseTs, 
-      num? moonsetTs, 
-      num? ozone, 
-      num? pop, 
-      num? precip, 
-      num? pres, 
-      num? rh, 
-      num? slp, 
-      num? snow, 
-      num? snowDepth, 
-      num? sunriseTs, 
-      num? sunsetTs, 
-      num? temp, 
-      num? ts, 
-      num? uv, 
-      String? validDate, 
-      num? vis, 
-      Weather? weather, 
-      String? windCdir, 
-      String? windCdirFull, 
-      num? windDir, 
-      num? windGustSpd, 
-      num? windSpd,}){
+    num? appMaxTemp,
+    num? appMinTemp,
+    num? clouds,
+    num? cloudsHi,
+    num? cloudsLow,
+    num? cloudsMid,
+    String? datetime,
+    num? dewpt,
+    num? highTemp,
+    num? lowTemp,
+    dynamic maxDhi,
+    num? maxTemp,
+    num? minTemp,
+    num? moonPhase,
+    num? moonPhaseLunation,
+    num? moonriseTs,
+    num? moonsetTs,
+    num? ozone,
+    num? pop,
+    num? precip,
+    num? pres,
+    num? rh,
+    num? slp,
+    num? snow,
+    num? snowDepth,
+    num? sunriseTs,
+    num? sunsetTs,
+    num? temp,
+    num? ts,
+    num? uv,
+    String? validDate,
+    num? vis,
+    Weather? weather,
+    String? windCdir,
+    String? windCdirFull,
+    num? windDir,
+    num? windGustSpd,
+    num? windSpd,
+  }) {
     _appMaxTemp = appMaxTemp;
     _appMinTemp = appMinTemp;
     _clouds = clouds;
@@ -161,7 +217,7 @@ class Data {
     _windDir = windDir;
     _windGustSpd = windGustSpd;
     _windSpd = windSpd;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _appMaxTemp = json['app_max_temp'];
@@ -196,128 +252,95 @@ class Data {
     _uv = json['uv'];
     _validDate = json['valid_date'];
     _vis = json['vis'];
-    _weather = json['weather'] != null ? Weather.fromJson(json['weather']) : null;
+    _weather =
+        json['weather'] != null ? Weather.fromJson(json['weather']) : null;
     _windCdir = json['wind_cdir'];
     _windCdirFull = json['wind_cdir_full'];
     _windDir = json['wind_dir'];
     _windGustSpd = json['wind_gust_spd'];
     _windSpd = json['wind_spd'];
   }
-  num? _appMaxTemp;
-  num? _appMinTemp;
-  num? _clouds;
-  num? _cloudsHi;
-  num? _cloudsLow;
-  num? _cloudsMid;
-  String? _datetime;
-  num? _dewpt;
-  num? _highTemp;
-  num? _lowTemp;
-  dynamic _maxDhi;
-  num? _maxTemp;
-  num? _minTemp;
-  num? _moonPhase;
-  num? _moonPhaseLunation;
-  num? _moonriseTs;
-  num? _moonsetTs;
-  num? _ozone;
-  num? _pop;
-  num? _precip;
-  num? _pres;
-  num? _rh;
-  num? _slp;
-  num? _snow;
-  num? _snowDepth;
-  num? _sunriseTs;
-  num? _sunsetTs;
-  num? _temp;
-  num? _ts;
-  num? _uv;
-  String? _validDate;
-  num? _vis;
-  Weather? _weather;
-  String? _windCdir;
-  String? _windCdirFull;
-  num? _windDir;
-  num? _windGustSpd;
-  num? _windSpd;
-Data copyWith({  num? appMaxTemp,
-  num? appMinTemp,
-  num? clouds,
-  num? cloudsHi,
-  num? cloudsLow,
-  num? cloudsMid,
-  String? datetime,
-  num? dewpt,
-  num? highTemp,
-  num? lowTemp,
-  dynamic maxDhi,
-  num? maxTemp,
-  num? minTemp,
-  num? moonPhase,
-  num? moonPhaseLunation,
-  num? moonriseTs,
-  num? moonsetTs,
-  num? ozone,
-  num? pop,
-  num? precip,
-  num? pres,
-  num? rh,
-  num? slp,
-  num? snow,
-  num? snowDepth,
-  num? sunriseTs,
-  num? sunsetTs,
-  num? temp,
-  num? ts,
-  num? uv,
-  String? validDate,
-  num? vis,
-  Weather? weather,
-  String? windCdir,
-  String? windCdirFull,
-  num? windDir,
-  num? windGustSpd,
-  num? windSpd,
-}) => Data(  appMaxTemp: appMaxTemp ?? _appMaxTemp,
-  appMinTemp: appMinTemp ?? _appMinTemp,
-  clouds: clouds ?? _clouds,
-  cloudsHi: cloudsHi ?? _cloudsHi,
-  cloudsLow: cloudsLow ?? _cloudsLow,
-  cloudsMid: cloudsMid ?? _cloudsMid,
-  datetime: datetime ?? _datetime,
-  dewpt: dewpt ?? _dewpt,
-  highTemp: highTemp ?? _highTemp,
-  lowTemp: lowTemp ?? _lowTemp,
-  maxDhi: maxDhi ?? _maxDhi,
-  maxTemp: maxTemp ?? _maxTemp,
-  minTemp: minTemp ?? _minTemp,
-  moonPhase: moonPhase ?? _moonPhase,
-  moonPhaseLunation: moonPhaseLunation ?? _moonPhaseLunation,
-  moonriseTs: moonriseTs ?? _moonriseTs,
-  moonsetTs: moonsetTs ?? _moonsetTs,
-  ozone: ozone ?? _ozone,
-  pop: pop ?? _pop,
-  precip: precip ?? _precip,
-  pres: pres ?? _pres,
-  rh: rh ?? _rh,
-  slp: slp ?? _slp,
-  snow: snow ?? _snow,
-  snowDepth: snowDepth ?? _snowDepth,
-  sunriseTs: sunriseTs ?? _sunriseTs,
-  sunsetTs: sunsetTs ?? _sunsetTs,
-  temp: temp ?? _temp,
-  ts: ts ?? _ts,
-  uv: uv ?? _uv,
-  validDate: validDate ?? _validDate,
-  vis: vis ?? _vis,
-  weather: weather ?? _weather,
-  windCdir: windCdir ?? _windCdir,
-  windCdirFull: windCdirFull ?? _windCdirFull,
-  windDir: windDir ?? _windDir,
-  windGustSpd: windGustSpd ?? _windGustSpd,
-  windSpd: windSpd ?? _windSpd,
-);
+
+  Data copyWith({
+    num? appMaxTemp,
+    num? appMinTemp,
+    num? clouds,
+    num? cloudsHi,
+    num? cloudsLow,
+    num? cloudsMid,
+    String? datetime,
+    num? dewpt,
+    num? highTemp,
+    num? lowTemp,
+    dynamic maxDhi,
+    num? maxTemp,
+    num? minTemp,
+    num? moonPhase,
+    num? moonPhaseLunation,
+    num? moonriseTs,
+    num? moonsetTs,
+    num? ozone,
+    num? pop,
+    num? precip,
+    num? pres,
+    num? rh,
+    num? slp,
+    num? snow,
+    num? snowDepth,
+    num? sunriseTs,
+    num? sunsetTs,
+    num? temp,
+    num? ts,
+    num? uv,
+    String? validDate,
+    num? vis,
+    Weather? weather,
+    String? windCdir,
+    String? windCdirFull,
+    num? windDir,
+    num? windGustSpd,
+    num? windSpd,
+  }) =>
+      Data(
+        appMaxTemp: appMaxTemp ?? _appMaxTemp,
+        appMinTemp: appMinTemp ?? _appMinTemp,
+        clouds: clouds ?? _clouds,
+        cloudsHi: cloudsHi ?? _cloudsHi,
+        cloudsLow: cloudsLow ?? _cloudsLow,
+        cloudsMid: cloudsMid ?? _cloudsMid,
+        datetime: datetime ?? _datetime,
+        dewpt: dewpt ?? _dewpt,
+        highTemp: highTemp ?? _highTemp,
+        lowTemp: lowTemp ?? _lowTemp,
+        maxDhi: maxDhi ?? _maxDhi,
+        maxTemp: maxTemp ?? _maxTemp,
+        minTemp: minTemp ?? _minTemp,
+        moonPhase: moonPhase ?? _moonPhase,
+        moonPhaseLunation: moonPhaseLunation ?? _moonPhaseLunation,
+        moonriseTs: moonriseTs ?? _moonriseTs,
+        moonsetTs: moonsetTs ?? _moonsetTs,
+        ozone: ozone ?? _ozone,
+        pop: pop ?? _pop,
+        precip: precip ?? _precip,
+        pres: pres ?? _pres,
+        rh: rh ?? _rh,
+        slp: slp ?? _slp,
+        snow: snow ?? _snow,
+        snowDepth: snowDepth ?? _snowDepth,
+        sunriseTs: sunriseTs ?? _sunriseTs,
+        sunsetTs: sunsetTs ?? _sunsetTs,
+        temp: temp ?? _temp,
+        ts: ts ?? _ts,
+        uv: uv ?? _uv,
+        validDate: validDate ?? _validDate,
+        vis: vis ?? _vis,
+        weather: weather ?? _weather,
+        windCdir: windCdir ?? _windCdir,
+        windCdirFull: windCdirFull ?? _windCdirFull,
+        windDir: windDir ?? _windDir,
+        windGustSpd: windGustSpd ?? _windGustSpd,
+        windSpd: windSpd ?? _windSpd,
+      );
   num? get appMaxTemp => _appMaxTemp;
   num? get appMinTemp => _appMinTemp;
   num? get clouds => _clouds;
@@ -401,7 +424,6 @@ Data copyWith({  num? appMaxTemp,
     map['wind_spd'] = _windSpd;
     return map;
   }
-
 }
 
 /// icon : "c02d"
@@ -410,31 +432,40 @@ Data copyWith({  num? appMaxTemp,
 
 Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 String weatherToJson(Weather data) => json.encode(data.toJson());
+
+@HiveType(typeId: 7, adapterName: "WeatherDailyAdapter")
 class Weather {
+  @HiveField(0)
+  String? _icon;
+  String? _description;
+  num? _code;
+
   Weather({
-      String? icon, 
-      String? description, 
-      num? code,}){
+    String? icon,
+    String? description,
+    num? code,
+  }) {
     _icon = icon;
     _description = description;
     _code = code;
-}
+  }
 
   Weather.fromJson(dynamic json) {
     _icon = json['icon'];
     _description = json['description'];
     _code = json['code'];
   }
-  String? _icon;
-  String? _description;
-  num? _code;
-Weather copyWith({  String? icon,
-  String? description,
-  num? code,
-}) => Weather(  icon: icon ?? _icon,
-  description: description ?? _description,
-  code: code ?? _code,
-);
+
+  Weather copyWith({
+    String? icon,
+    String? description,
+    num? code,
+  }) =>
+      Weather(
+        icon: icon ?? _icon,
+        description: description ?? _description,
+        code: code ?? _code,
+      );
   String? get icon => _icon;
   String? get description => _description;
   num? get code => _code;
@@ -446,5 +477,4 @@ Weather copyWith({  String? icon,
     map['code'] = _code;
     return map;
   }
-
 }

@@ -1,8 +1,11 @@
+//keys
 const apiKey = "34f025c086c8aa44f7a28c30cd1d3c35";
-const weatherBitApiKey = "78583aa7b226459196b835b9aaa2c22e";
+const weatherBitApiKey = "680e1cb5ffd34fb38fc6546944e9f9e3";
 
-const currentWeatherCachesKey = "CurrentWeather";
-const currentWeather = "CurrentWeatherTable";
+//boxes name
+const currentWeatherBox = "CurrentWeatherBox";
+const hourlyWeatherBox = "HourlyWeatherBox";
+const dailyWeatherBox = "DailyWeatherBox";
 
-const dailyWeatherCacheKey = "CurrentWeather";
-const dailyWeatherTable = "CurrentWeatherTable";
+//symbol
+const degree = "°";

@@ -1,26 +1,32 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+part 'current_weather_model.g.dart';
+
 CurrentWeather weatherModelFromJson(String str) =>
     CurrentWeather.fromJson(json.decode(str));
 
 String weatherModelToJson(CurrentWeather data) => json.encode(data.toJson());
 
-class CurrentWeather {
-    Coord? _coord;
-    List<Weather>? _weather;
-    String? _base;
-    Main? _main;
-    num? _visibility;
-    Wind? _wind;
-    Clouds? _clouds;
-    num? _dt;
-    Sys? _sys;
-    num? _timezone;
-
+@HiveType(typeId: 0)
+class CurrentWeather extends HiveObject{
+  Coord? _coord;
+  @HiveField(0)
+  List<Weather>? _weather;
+  String? _base;
+  @HiveField(1)
+  Main? _main;
+  num? _visibility;
+  @HiveField(2)
+  Wind? _wind;
+  @HiveField(3)
+  Clouds? _clouds;
+  @HiveField(4)
+  num? _dt;
+  Sys? _sys;
+  num? _timezone;
   num? _id;
-
   String? _name;
-
   num? _cod;
 
   CurrentWeather({
@@ -157,9 +163,9 @@ Sys sysFromJson(String str) => Sys.fromJson(json.decode(str));
 String sysToJson(Sys data) => json.encode(data.toJson());
 
 class Sys {
-    String? _country;
-    num? _sunrise;
-    num? _sunset;
+  String? _country;
+  num? _sunrise;
+  num? _sunset;
   Sys({
     String? country,
     num? sunrise,
@@ -175,7 +181,7 @@ class Sys {
     _sunrise = json['sunrise'];
     _sunset = json['sunset'];
   }
-  
+
   Sys copyWith({
     String? country,
     num? sunrise,
@@ -204,10 +210,11 @@ class Sys {
 Clouds cloudsFromJson(String str) => Clouds.fromJson(json.decode(str));
 String cloudsToJson(Clouds data) => json.encode(data.toJson());
 
+@HiveType(typeId: 1)
 class Clouds {
+  @HiveField(0)
+  num? _all;
 
-    num? _all;
-  
   Clouds({
     num? all,
   }) {
@@ -217,7 +224,7 @@ class Clouds {
   Clouds.fromJson(dynamic json) {
     _all = json['all'];
   }
-  
+
   Clouds copyWith({
     num? all,
   }) =>
@@ -240,11 +247,13 @@ class Clouds {
 Wind windFromJson(String str) => Wind.fromJson(json.decode(str));
 String windToJson(Wind data) => json.encode(data.toJson());
 
+@HiveType(typeId: 2)
 class Wind {
-    num? _speed;
-    num? _deg;
-    num? _gust;
-  
+  @HiveField(0)
+  num? _speed;
+  num? _deg;
+  num? _gust;
+
   Wind({
     num? speed,
     num? deg,
@@ -296,15 +305,18 @@ class Wind {
 Main mainFromJson(String str) => Main.fromJson(json.decode(str));
 String mainToJson(Main data) => json.encode(data.toJson());
 
+@HiveType(typeId: 3)
 class Main {
-    num? _temp;
-    num? _feelsLike;
-    num? _tempMin;
-    num? _tempMax;
-    num? _pressure;
-    num? _humidity;
-    num? _seaLevel;
-    num? _grndLevel;
+  @HiveField(0)
+  num? _temp;
+  num? _feelsLike;
+  num? _tempMin;
+  num? _tempMax;
+  num? _pressure;
+  @HiveField(1)
+  num? _humidity;
+  num? _seaLevel;
+  num? _grndLevel;
   Main({
     num? temp,
     num? feelsLike,
@@ -335,7 +347,7 @@ class Main {
     _seaLevel = json['sea_level'];
     _grndLevel = json['grnd_level'];
   }
- 
+
   Main copyWith({
     num? temp,
     num? feelsLike,
@@ -387,13 +399,15 @@ class Main {
 Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 String weatherToJson(Weather data) => json.encode(data.toJson());
 
+@HiveType(typeId: 4)
 class Weather {
+  num? _id;
+  String? _main;
+  @HiveField(0)
+  String? _description;
+  @HiveField(1)
+  String? _icon;
 
-    num? _id;
-    String? _main;
-    String? _description;
-    String? _icon;
-  
   Weather({
     num? id,
     String? main,
@@ -412,7 +426,7 @@ class Weather {
     _description = json['description'];
     _icon = json['icon'];
   }
-  
+
   Weather copyWith({
     num? id,
     String? main,
@@ -447,8 +461,8 @@ Coord coordFromJson(String str) => Coord.fromJson(json.decode(str));
 String coordToJson(Coord data) => json.encode(data.toJson());
 
 class Coord {
-    num? _lon;
-    num? _lat;
+  num? _lon;
+  num? _lat;
   Coord({
     num? lon,
     num? lat,

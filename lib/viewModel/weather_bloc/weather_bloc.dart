@@ -7,43 +7,46 @@ import 'package:flutter_weather/viewModel/weather_bloc/weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherBaseRepository _weatherRepository;
-  final double latitude, longitude;
 
-  WeatherBloc(
-      {required WeatherRepository weatherRepository,
-      required this.latitude,
-      required this.longitude})
-      : _weatherRepository = weatherRepository,
-        super(WeatherLoadingState()) {
-    //register CurrentWeatherLoadedEvent
-    on<CurrentWeatherLoadedEvent>(_currentWeatherEvent);
-
-    //register CDailyWeatherLoadedEvent
-    on<DailyWeatherLoadedEvent>(_dailyWeatherEvent);
+  WeatherBloc({
+    required WeatherRepository weatherRepository,
+  })  : _weatherRepository = weatherRepository,
+        super(WeatherLoadingState()){
+    on<WeatherLoadedEvent>(_weatherEvent);
   }
 
   //current weather event
-  void _currentWeatherEvent(CurrentWeatherLoadedEvent event, Emitter<WeatherState> emit) async{
+  void _weatherEvent(
+      WeatherLoadedEvent event, Emitter<WeatherState> emit) async {
     try {
-      //fetch current weather data
-      final currentWeather = await _weatherRepository.getCurrentWeather(latitude: latitude, longitude: longitude);
+      //fetch weather data
+      final currentWeather = await _weatherRepository.getCurrentWeather(
+          latitude: event.latitude,
+          longitude: event.longitude,
+          city: event.city);
 
-      emit(CurrentWeatherLoadedState(currentWeather: currentWeather));
+      final hourlyWeather = await _weatherRepository.getCurrentWeatherHourly(
+          latitude: event.latitude,
+          longitude: event.longitude,
+          city: event.city);
+
+      final dailyWeather = await _weatherRepository.getDailyWeather(
+          latitude: event.latitude,
+          longitude: event.longitude,
+          city: event.city);
+
+      debugPrint("CurrentWeather data : ${currentWeather.toJson()}");
+      debugPrint("DailyWeather data : ${dailyWeather.toJson()}");
+      debugPrint("HourlyWeather data : ${hourlyWeather.toJson()}");
+
+      emit(WeatherLoadedState(
+        currentWeather: currentWeather,
+        dailyWeather: dailyWeather,
+        hourlyWeather: hourlyWeather
+      ));
     } catch (e) {
       emit(WeatherErrorState(e.toString()));
-    }
-  }
-
-  void _dailyWeatherEvent(DailyWeatherLoadedEvent event, Emitter<WeatherState> emit) async{
-    try{
-      //fetch daily weather data
-      final dailyWeather = await _weatherRepository.getDailyWeather(latitude: latitude, longitude: longitude);
-      for(var d in dailyWeather.data!){
-        debugPrint("DailyWeather: ${d.datetime}");
-      }
-      emit(DailyWeatherLoadedState(dailyWeather: dailyWeather));
-    } catch (e) {
-      emit(WeatherErrorState(e.toString()));
+      debugPrint("Weather error : ${e.toString()}");
     }
   }
 }
