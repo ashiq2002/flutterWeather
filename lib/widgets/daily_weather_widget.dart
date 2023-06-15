@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/res/values.dart';
+import 'package:flutter_weather/viewModel/internet_bloc/internet_bloc.dart';
+import 'package:flutter_weather/viewModel/internet_bloc/internet_state.dart';
 import 'package:flutter_weather/viewModel/weather_bloc/weather_bloc.dart';
 import 'package:flutter_weather/viewModel/weather_bloc/weather_event.dart';
 import 'package:flutter_weather/viewModel/weather_bloc/weather_state.dart';
@@ -81,12 +83,13 @@ class DailyWeatherWidget extends StatelessWidget {
                                     color: Colors.black, fontSize: 13),
                               )),
                           //weather icon
-                          SizedBox(
+                          BlocBuilder<InternetBloc, InternetState>(builder: (context, internetState)=>SizedBox(
                             height: 30,
                             width: 30,
-                            child: Image.network(
-                                'https://cdn.weatherbit.io/static/img/icons/${state.dailyWeather.data![index].weather!.icon}.png'),
-                          ),
+                            child: internetState is InternetGainedState? Image.network(
+                          'https://cdn.weatherbit.io/static/img/icons/${state.dailyWeather.data![index].weather!.icon}.png')
+                            : Image.asset('assets/weather/02n.png'),
+                          ),),
                           //maximum and minimum temperature
                           Text(
                               "${state.dailyWeather.data![index].appMaxTemp}$degree/${state.dailyWeather.data![index].appMinTemp}"),

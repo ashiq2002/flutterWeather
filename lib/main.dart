@@ -20,6 +20,7 @@ void main() async{
   Hive.init(directory.path);
 
   //register current weather adapters
+  Hive.registerAdapter(CoordAdapter());
   Hive.registerAdapter(CurrentWeatherAdapter());
   Hive.registerAdapter(WeatherAdapter());
   Hive.registerAdapter(MainAdapter());

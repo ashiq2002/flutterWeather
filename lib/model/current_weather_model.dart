@@ -10,18 +10,19 @@ String weatherModelToJson(CurrentWeather data) => json.encode(data.toJson());
 
 @HiveType(typeId: 0)
 class CurrentWeather extends HiveObject{
-  Coord? _coord;
   @HiveField(0)
+  Coord? _coord;
+  @HiveField(1)
   List<Weather>? _weather;
   String? _base;
-  @HiveField(1)
+  @HiveField(2)
   Main? _main;
   num? _visibility;
-  @HiveField(2)
-  Wind? _wind;
   @HiveField(3)
-  Clouds? _clouds;
+  Wind? _wind;
   @HiveField(4)
+  Clouds? _clouds;
+  @HiveField(5)
   num? _dt;
   Sys? _sys;
   num? _timezone;
@@ -460,8 +461,11 @@ class Weather {
 Coord coordFromJson(String str) => Coord.fromJson(json.decode(str));
 String coordToJson(Coord data) => json.encode(data.toJson());
 
+@HiveType(typeId: 55)
 class Coord {
+  @HiveField(0)
   num? _lon;
+  @HiveField(1)
   num? _lat;
   Coord({
     num? lon,

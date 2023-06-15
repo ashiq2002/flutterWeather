@@ -7,7 +7,6 @@ import 'package:flutter_weather/viewModel/locationBloc//location_state.dart';
 import 'package:flutter_weather/viewModel/weather_bloc/weather_bloc.dart';
 import 'package:flutter_weather/viewModel/weather_bloc/weather_event.dart';
 import 'package:flutter_weather/widgets/daily_weather_widget.dart';
-import 'package:flutter_weather/widgets/header_widget.dart';
 import 'package:flutter_weather/widgets/hourly_current_weather_widget.dart';
 import 'package:flutter_weather/widgets/my_appbar.dart';
 import 'package:flutter_weather/widgets/notify_to_allow.dart';
@@ -37,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('rebuild...');
     return BlocBuilder<LocationBloc, LocationState>(
         builder: (context, locationState) {
       return Scaffold(
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: controller,
               onPressed: () {
                 debugPrint("Search : ${controller.text}");
-                context.read<WeatherBloc>().add(WeatherLoadedEvent(city: controller.text.toString()));
+
                 //FocusScope.of(context).unfocus();
               }),
           body: SafeArea(

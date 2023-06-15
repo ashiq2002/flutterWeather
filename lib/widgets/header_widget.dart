@@ -22,8 +22,7 @@ class HeaderWidget extends StatelessWidget {
               locality: locality,
             );
           }
-          //if snapshot have no data then set from local database
-          return const Center(child: CircularProgressIndicator(),);
+          return const SizedBox();
         });
   }
 

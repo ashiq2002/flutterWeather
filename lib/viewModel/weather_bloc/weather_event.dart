@@ -2,13 +2,13 @@ import 'package:equatable/equatable.dart';
 
 abstract class WeatherEvent extends Equatable{
   const WeatherEvent();
-}
-
-class WeatherLoadingEvent extends WeatherEvent{
   @override
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+class WeatherLoadingEvent extends WeatherEvent{}
+
 class WeatherLoadedEvent extends WeatherEvent{
   final double latitude;
   final double longitude;

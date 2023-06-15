@@ -17,26 +17,29 @@ class CurrentWeatherAdapter extends TypeAdapter<CurrentWeather> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CurrentWeather()
-      .._weather = (fields[0] as List?)?.cast<Weather>()
-      .._main = fields[1] as Main?
-      .._wind = fields[2] as Wind?
-      .._clouds = fields[3] as Clouds?
-      .._dt = fields[4] as num?;
+      .._coord = fields[0] as Coord?
+      .._weather = (fields[1] as List?)?.cast<Weather>()
+      .._main = fields[2] as Main?
+      .._wind = fields[3] as Wind?
+      .._clouds = fields[4] as Clouds?
+      .._dt = fields[5] as num?;
   }
 
   @override
   void write(BinaryWriter writer, CurrentWeather obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj._weather)
+      ..write(obj._coord)
       ..writeByte(1)
-      ..write(obj._main)
+      ..write(obj._weather)
       ..writeByte(2)
-      ..write(obj._wind)
+      ..write(obj._main)
       ..writeByte(3)
-      ..write(obj._clouds)
+      ..write(obj._wind)
       ..writeByte(4)
+      ..write(obj._clouds)
+      ..writeByte(5)
       ..write(obj._dt);
   }
 
@@ -183,6 +186,42 @@ class WeatherAdapter extends TypeAdapter<Weather> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is WeatherAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CoordAdapter extends TypeAdapter<Coord> {
+  @override
+  final int typeId = 55;
+
+  @override
+  Coord read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Coord()
+      .._lon = fields[0] as num?
+      .._lat = fields[1] as num?;
+  }
+
+  @override
+  void write(BinaryWriter writer, Coord obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj._lon)
+      ..writeByte(1)
+      ..write(obj._lat);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CoordAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

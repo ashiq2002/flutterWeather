@@ -19,6 +19,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   void _weatherEvent(
       WeatherLoadedEvent event, Emitter<WeatherState> emit) async {
     try {
+      emit(WeatherLoadingState());
       //fetch weather data
       final currentWeather = await _weatherRepository.getCurrentWeather(
           latitude: event.latitude,
